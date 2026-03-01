@@ -24,4 +24,9 @@ public class OnsiteWorker extends Worker {
     public double calculateSalary(int hoursWorked) {
         return (hoursWorked * getPricePerHour()) + fuelAllowance;
     }
+
+    @Deprecated
+    public double calculateOldSalary(int hourWorked){
+        return hourWorked * getPricePerHour();
+    }
 }

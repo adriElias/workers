@@ -16,4 +16,9 @@ public class OnlineWorker extends Worker{
     public String toString() {
         return "[Online] " + super.toString() + " | Internet fee: " + INTERNET_FEE + "€";
     }
+
+    @Deprecated
+    public double calculateOldSalary(int hoursWorked){
+        return hoursWorked * getPricePerHour();
+    }
 }

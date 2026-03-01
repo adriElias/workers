@@ -80,23 +80,71 @@ public class WorkerTest {
     @DisplayName("OnlineWorker: calculateSalary includes internet fee")
     void testOnlineCalculateSalary() {
 
-        OnlineWorker o = new OnlineWorker("Peter", "Williams", 18.0);
-        assertEquals(2930.0, o.calculateSalary(160), 0.01);
+        OnlineWorker onlineWorker = new OnlineWorker("Peter", "Williams", 18.0);
+        assertEquals(2930.0, onlineWorker.calculateSalary(160), 0.01);
     }
 
     @Test
     @DisplayName("OnlineWorker: calculateSalary with 0 hours returns only the internet fee")
     void testOnlineCalculateSalaryZeroHours() {
 
-        OnlineWorker o = new OnlineWorker("Peter", "Williams", 18.0);
-        assertEquals(50.0, o.calculateSalary(0), 0.01);
+        OnlineWorker onlineWorker = new OnlineWorker("Peter", "Williams", 18.0);
+        assertEquals(50.0, onlineWorker.calculateSalary(0), 0.01);
     }
 
     @Test
     @DisplayName("OnlineWorker: is a subclass of Worker")
     void testOnlineInheritance() {
 
-        OnlineWorker o = new OnlineWorker("Peter", "Williams", 18.0);
-        assertInstanceOf(Worker.class, o);
+        OnlineWorker onlineWorker = new OnlineWorker("Peter", "Williams", 18.0);
+        assertInstanceOf(Worker.class, onlineWorker);
+    }
+
+    @Test
+    @DisplayName("OnsiteWorker: calculateOldSalary does NOT include fuel allowance")
+    @SuppressWarnings("deprecation")
+    void testOnsiteCalculateOldSalary() {
+
+        OnsiteWorker onsiteWorker = new OnsiteWorker("Mary", "Johnson", 15.0);
+        assertEquals(2400.0, onsiteWorker.calculateOldSalary(160), 0.01);
+    }
+
+    @Test
+    @DisplayName("OnsiteWorker: calculateOldSalary differs from calculateSalary")
+    @SuppressWarnings("deprecation")
+    void testOnsiteOldVsNewSalary() {
+
+        OnsiteWorker.setFuelAllowance(150.0);
+        OnsiteWorker onsiteWorker = new OnsiteWorker("Mary", "Johnson", 15.0);
+
+        double oldSalary = onsiteWorker.calculateOldSalary(160);  // deprecated: no fuel
+        double newSalary = onsiteWorker.calculateSalary(160);    // current: includes fuel
+
+        assertNotEquals(oldSalary, newSalary);
+        assertEquals(newSalary - oldSalary, OnsiteWorker.getFuelAllowance(), 0.01);
+    }
+
+    @Test
+    @DisplayName("OnlineWorker: calculateOldSalary does NOT include internet fee")
+    @SuppressWarnings("deprecation")
+    void testOnlineCalculateOldSalary() {
+
+        OnlineWorker onlineWorker = new OnlineWorker("Peter", "Williams", 18.0);
+        assertEquals(2880.0, onlineWorker.calculateOldSalary(160), 0.01);
+    }
+
+    @Test
+    @DisplayName("OnlineWorker: calculateOldSalary differs from calculateSalary")
+    @SuppressWarnings("deprecation")
+    void testOnlineOldVsNewSalary() {
+
+        OnlineWorker onlineWorker = new OnlineWorker("Peter", "Williams", 18.0);
+
+        double oldSalary = onlineWorker.calculateOldSalary(160);  // deprecated: no internet fee
+        double newSalary = onlineWorker.calculateSalary(160);    // current: includes internet fee
+
+        assertNotEquals(oldSalary, newSalary);
+        // The difference should be exactly the internet fee (50.0)
+        assertEquals(50.0, newSalary - oldSalary, 0.01);
     }
 }
